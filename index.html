@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Frictionless</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="stylesheet.css"/>
+    </head>
+    <body>
+        <canvas></canvas>
+        <!-- try not to have circular dependencies--oh wait, i failed. -->
+        <script src="frictionless.js"></script>
+        <script src="level.js"></script>
+        <script src="player.js"></script>
+        <script src="engine.js"></script>
+        <script>
+            var canvas = document.querySelector("canvas");
+            canvas.width = 700; canvas.height = 400;
+            Engine.init(canvas);
+            Engine.start_game();
+        </script>
+    </body>
+</html>
