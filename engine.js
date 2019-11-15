@@ -139,7 +139,7 @@ var Engine = (function() {
     
     return {
         get gravity() {
-            return 0.05;
+            return 0.0005;
         },
         
         get current_level() {
@@ -160,5 +160,7 @@ var Engine = (function() {
             Player.init(document.body);
             requestAnimationFrame(animate);
         },
+        
+        load_level: load_level,
     };
 })();

@@ -16,11 +16,11 @@ var Player = (function() {
         action: false, // ???
     };
     
-    var jump_speed = 0.1;
+    var jump_speed = -0.01;
     
     function is_supported() {
-        return (Engine.current_level.get_tile(new Vector(x, Math.floor(y + height))) == "wall" || 
-                Engine.current_level.get_tile(new Vector(Math.floor(x + width), Math.floor(y + height))) == "wall");
+        return (Engine.current_level.get_tile(new Vector(Math.floor(x), Math.ceil(y + height))) == "wall" || 
+                Engine.current_level.get_tile(new Vector(Math.floor(x + width), Math.ceil(y + height))) == "wall");
     }
     
     function move_x(new_pos) {
@@ -32,7 +32,9 @@ var Player = (function() {
     
     function move_y(new_pos) {
         var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
-        if (!obstacle) {
+        if (obstacle) {
+            v_y = 0;
+        } else {
             y = new_pos.y;
         }
     }
@@ -125,14 +127,23 @@ var Player = (function() {
         update: function(lapse) {
             //for now, just some basic movement
             var new_position = {x: x, y: y};
-            new_position.x += keys.left ? -0.005 * lapse : 0;
-            new_position.y += keys.up ? -0.005 * lapse : 0;
-            new_position.x += keys.right ? 0.005 * lapse : 0;
-            new_position.y += keys.down ? 0.005 * lapse : 0;
+            new_position.x += keys.left ? -0.01 * lapse : 0;
+            //new_position.y += keys.up ? -0.005 * lapse : 0;
+            new_position.x += keys.right ? 0.01 * lapse : 0;
+            //new_position.y += keys.down ? 0.005 * lapse : 0;
+            
+            v_y += Engine.gravity * lapse / 3;
+            if (keys.up && is_supported()) {
+                v_y += jump_speed;
+            }
+            
+            new_position.y += v_y * lapse;
             
             //check for collision
-            move_x(new_position);
-            move_y(new_position);
+            move_x({x: new_position.x, y: y});
+            move_y({x: x, y: new_position.y});
         },
+        
+        is_supported: is_supported,
     };
 })();
