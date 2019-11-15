@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" type ="text/css" href="css/style.css"/>
+</head>
+<body>
+	<!-- Imported scripts -->
+	<!-- For da tests, we'll pretend these don't exist. -->
+	<script src="script/engine.js"></script>
+	<script src="script/uielement.js"></script>
+	<script src="script/uihandler.js"></script>
+	<script src="script/state_manager.js"></script>
+	<!-- Business Logic -->
+	<script src="script/viewport.js"></script>
+	<script src="script/grid_map.js"></script>	
+	<script src="script/map.js"></script>	
+	<script src="script/map_object.js"></script>
+	<script src="script/map_manager.js"></script>
+	<script src="script/inventory.js"></script>	
+	<script src="script/game.js"></script>	
+	
+	<script>
+		var images = {
+			"test1": create_image("assets/test1.png"),
+		}
+		
+		window.onload = function()
+		{
+			Engine.initialize();
+		}
+	</script>
+</body>
+</html>
