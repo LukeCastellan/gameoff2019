@@ -21,6 +21,7 @@ var Game = (function()
 			
 			paint: function(context,x,y)
 			{
+				Inventory_handler.paint(context,x,y);
 				//map.draw(context,x,y);
 			},
 			

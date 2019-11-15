@@ -1,42 +1,35 @@
-var Inventory_handler = (
-	function()
-	{
+var Inventory_handler = (function() {
 		// constants
 		var ITEM_WIDTH = 400;
 		var ITEM_HEIGHT = 200;
-		
 		var element = new UIPanel(0,0,800,575);
-		
 		var fields = {
 			inventory: null,
 		}
 		Object.assign(element,fields);
-		
 		var methods = {			
 			// get map() {return map},
-			
-			initialize: function()
-			{	
+			initialize: function() {	
 				Engine.log("Initializing Inventory_handler...");
-				
 				this.inventory = new Inventory(30,20);
-				
 			},
-			
-			paint: function(context,x,y)
-			{
+			paint: function(context,x,y) {
 				//map.draw(context,x,y);
-				for(var x = 0; x < inventory.width; x++)
-				{
-					for(var y = 0; y < inventory.height; y++)
-					{
-						
+				var gridWidth;
+				var gridHeight;
+				var gridSpace;
+				gridWidth = gridHeight = gridSpace = 50;
+				for(var x = 0; x < this.inventory.width; x++) {
+					for(var y = 0; y < this.inventory.height; y++) {
+						context.beginPath();
+						context.strokeStyle = "black";
+						context.strokeRect(gridSpace*x, gridSpace*y+25, gridWidth, gridHeight);
+						context.stroke();
+						Engine.log("painted inventory grids");
 					}
 				}
 			},
-			
-			tick: function(lapse)
-			{
+			tick: function(lapse) {
 				
 			},
 		}
