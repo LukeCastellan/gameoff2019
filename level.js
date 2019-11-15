@@ -15,14 +15,17 @@ function Level(plan, mapping, name) {
     //scan the level
     for (var y = 0; y < plan.length; y++) {
     	var line = plan[y].split("");
+        var tile_line = [];
     	for (var x = 0; x < line.length; x++) {
         	if (mapping[line[x]] == "player") {
-                this.starting_position = {x: x, y: y};
-            	this.tiles.push("blank");
+                this.starting_position = new Vector(x, y);
+            	tile_line.push("blank");
         	} else {
-        	    this.tiles.push(mapping[line[x]]);
+        	    tile_line.push(mapping[line[x]]);
             }
     	}
+        
+        this.tiles.push(tile_line);
     }
     
     if (name) {
@@ -31,11 +34,12 @@ function Level(plan, mapping, name) {
         this.name = "an unnamed level";
     }
 }
-    
-Level.prototype.get_tile = function(x, y) {
-    return this.tiles[y * this.width + x];
+
+//DEPRECATED
+Level.prototype.get_tile = function(pos) {
+    return this.tiles[pos.y][pos.x];
 };
     
-Level.prototype.set_tile = function(x, y, new_tile) {
+Level.prototype.set_tile = function(pos, new_tile) {
     Engine.log("gotta set up the set_tile() function.");
 };

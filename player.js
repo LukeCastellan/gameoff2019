@@ -94,8 +94,8 @@ var Player = (function() {
             });
         },
         
-        set_position: function(new_x, new_y, keep_state) {
-            x = new_x; y = new_y;
+        set_position: function(new_position, keep_state) {
+            x = new_position.x; y = new_position.y;
             
             if (!keep_state) {
                 v_x = 0; v_y = 0;
