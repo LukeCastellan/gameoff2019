@@ -25,7 +25,9 @@ var Player = (function() {
     
     function move_x(new_pos) {
         var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
-        if (!obstacle) {
+        if (obstacle) {
+			v_x = 0
+		} else {
             x = new_pos.x;
         }
     }
@@ -127,11 +129,14 @@ var Player = (function() {
         update: function(lapse) {
             //for now, just some basic movement
             var new_position = {x: x, y: y};
-            new_position.x += keys.left ? -0.01 * lapse : 0;
-            //new_position.y += keys.up ? -0.005 * lapse : 0;
-            new_position.x += keys.right ? 0.01 * lapse : 0;
-            //new_position.y += keys.down ? 0.005 * lapse : 0;
-            
+			if(is_supported())
+			{
+				v_x += keys.left ? -0.00002 * lapse : 0;
+				v_x += keys.right ? 0.00002 * lapse : 0;
+			}
+			
+            new_position.x += v_x * lapse;
+			
             v_y += Engine.gravity * lapse / 3;
             if (keys.up && is_supported()) {
                 v_y += jump_speed;

@@ -139,7 +139,7 @@ var Engine = (function() {
     
     return {
         get gravity() {
-            return 0.0005;
+            return 0.0002;
         },
         
         get current_level() {
