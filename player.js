@@ -16,6 +16,27 @@ var Player = (function() {
         action: false, // ???
     };
     
+    var jump_speed = 0.1;
+    
+    function is_supported() {
+        return (Engine.current_level.get_tile(new Vector(x, Math.floor(y + height))) == "wall" || 
+                Engine.current_level.get_tile(new Vector(Math.floor(x + width), Math.floor(y + height))) == "wall");
+    }
+    
+    function move_x(new_pos) {
+        var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
+        if (!obstacle) {
+            x = new_pos.x;
+        }
+    }
+    
+    function move_y(new_pos) {
+        var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
+        if (!obstacle) {
+            y = new_pos.y;
+        }
+    }
+    
     return {
         get position() {
             return {x: x, y: y};
@@ -103,10 +124,15 @@ var Player = (function() {
         
         update: function(lapse) {
             //for now, just some basic movement
-            x += keys.left ? -0.005 * lapse : 0;
-            y += keys.up ? -0.005 * lapse : 0;
-            x += keys.right ? 0.005 * lapse : 0;
-            y += keys.down ? 0.005 * lapse : 0;
+            var new_position = {x: x, y: y};
+            new_position.x += keys.left ? -0.005 * lapse : 0;
+            new_position.y += keys.up ? -0.005 * lapse : 0;
+            new_position.x += keys.right ? 0.005 * lapse : 0;
+            new_position.y += keys.down ? 0.005 * lapse : 0;
+            
+            //check for collision
+            move_x(new_position);
+            move_y(new_position);
         },
     };
 })();

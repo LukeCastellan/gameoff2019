@@ -71,7 +71,7 @@ var Engine = (function() {
                     //DRAW THAT WALL! DRAW THAT WALL!
                     var draw_x = (a - viewport.offset_x) * viewport.scale;
                     var draw_y = (b - viewport.offset_y) * viewport.scale;
-                    cxt.fillRect(draw_x, draw_y, viewport.scale, viewport.scale);
+                    cxt.fillRect(draw_x, draw_y, viewport.scale - 1, viewport.scale - 1);
                 }
             }
         }
@@ -81,6 +81,10 @@ var Engine = (function() {
         var draw_y = (Player.position.y - viewport.top) * viewport.scale;
         cxt.fillStyle = player_colour;
         cxt.fillRect(draw_x, draw_y, viewport.scale * Player.dimensions.x, viewport.scale * Player.dimensions.y);
+        
+        cxt.fillStyle = "white";
+        cxt.font = "16pt Arial";
+        cxt.fillText(current_level.name, 5, 25);
     }
     
     //helper function: updates the viewport and gets everything that's in view

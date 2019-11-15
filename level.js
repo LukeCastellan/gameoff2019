@@ -18,7 +18,7 @@ function Level(plan, mapping, name) {
         var tile_line = [];
     	for (var x = 0; x < line.length; x++) {
         	if (mapping[line[x]] == "player") {
-                this.starting_position = new Vector(x, y);
+                this.starting_position = new Vector(x, y - Player.dimensions.y + 0.95);
             	tile_line.push("blank");
         	} else {
         	    tile_line.push(mapping[line[x]]);
@@ -35,11 +35,28 @@ function Level(plan, mapping, name) {
     }
 }
 
-//DEPRECATED
 Level.prototype.get_tile = function(pos) {
     return this.tiles[pos.y][pos.x];
 };
     
 Level.prototype.set_tile = function(pos, new_tile) {
-    Engine.log("gotta set up the set_tile() function.");
+    this.tiles[pos.y][pos.x] = new_tile;
+};
+
+Level.prototype.get_obstacle = function(pos, size) {
+    var start_x = Math.floor(pos.x), end_x = Math.floor(pos.x + size.x);
+    var start_y = Math.floor(pos.y), end_y = Math.floor(pos.y + size.y);
+    
+    if (start_x < 0 || end_x > this.width || start_y < 0 || end_y > this.height) {
+        return "wall";
+    } else {
+        for (var c = start_y; c <= end_y; c++) {
+            for (var b = start_x; b <= end_x; b++) {
+                var tile = this.tiles[c][b];
+                if (tile != "blank") return tile;
+            }
+        }
+        
+        return null;
+    }
 };
