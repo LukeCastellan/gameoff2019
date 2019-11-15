@@ -38,7 +38,6 @@ var Player = (function() {
                 element: the element to which to add the keyboard event listeners (usually the game canvas)
             */
             element.addEventListener("keydown", function(e) {
-                e.preventDefault();
                 e.stopPropagation();
                 
                 switch (e.keyCode) {
@@ -66,7 +65,6 @@ var Player = (function() {
             });
             
             element.addEventListener("keyup", function(e) {
-                e.preventDefault();
                 e.stopPropagation();
                 
                 switch (e.keyCode) {

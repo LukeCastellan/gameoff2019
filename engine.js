@@ -61,9 +61,9 @@ var Engine = (function() {
         var in_view = get_in_view();
         
         //draw the level itself.
-        for (b = 0; b < Math.ceil(viewport.view_height); b++) {
-            for (a = 0; a < Math.ceil(viewport.view_width); a++) {
-                if (in_view[b * Math.ceil(viewport.view_width) + a] == "blank") {
+        for (b = 0; b < in_view.length; b++) {
+            for (a = 0; a < in_view[b].length; a++) {
+                if (in_view[b][a] == "blank") {
                     //skip!
                     continue;
                 } else {
@@ -114,9 +114,7 @@ var Engine = (function() {
         //get everything in view
         var in_view = [];
         for (var b = Math.floor(viewport.top); b < Math.ceil(viewport.top + viewport.view_height); b++) {
-            for (var a = Math.floor(viewport.left); a < Math.ceil(viewport.left + viewport.view_width); a++) {
-                in_view.push(current_level.get_tile({x: a, y: b}));
-            }
+            in_view.push(current_level.tiles[b].slice(Math.floor(viewport.left), Math.ceil(viewport.left + viewport.view_width + 1)));
         }
         
         return in_view;
