@@ -1,1 +1,11 @@
 /* **you tell me** what to put here */
+
+html, body {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    position: absolute;
+}

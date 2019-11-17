@@ -18,6 +18,12 @@
             canvas.width = 700; canvas.height = 400;
             Engine.init(canvas);
             Engine.start_game();
+            
+            window.addEventListener("message", function(event) {
+                console.log("a custom level was received.");
+                console.log(event.data);
+                Engine.load_level(new Level(event.data, {"x": "wall", "@": "player", " ": "blank"}, "an unnamed level"));
+            });
         </script>
     </body>
 </html>

@@ -122,6 +122,33 @@
             var WALL = "x";
             var PLAYER = "@";
             
+            var child_window;
+            
+            //testing level mechanism
+            //register event handler on "test level" button
+            document.getElementById("test").addEventListener("click", function() {
+                child_window = window.open("index.html", "Popup", "width=710,height=410,top=30,left=30");
+                var grid = [];
+                for (var b = 0; b < level_map.childNodes.length; b++) {
+                    var gridline = "";
+                    var line = level_map.childNodes[b];
+                    for (var a = 0; a < line.childNodes.length; a++) {
+                        if (line.childNodes[a].innerHTML == "&nbsp;" || line.childNodes[a].innerHTML == "&#160;") {
+                            gridline = gridline + " ";
+                        } else {
+                            gridline = gridline + line.childNodes[a].innerHTML;
+                        }
+                    }
+                    grid.push(gridline);
+                }
+                
+                child_window.postMessage(grid, "*");
+            });
+            //is level testable?
+            function update_testable(t) {
+                document.getElementById("test").disabled = t;
+            }
+            
             var tile_type = "wall";
             var tile_type_selection = document.getElementById("type");
             tile_type_selection.addEventListener("change", function() {
@@ -140,12 +167,14 @@
                         case "wall":
                             if (tile.innerHTML == PLAYER) {
                                 document.getElementById("place_player").disabled = false;
+                                update_testable(true);
                             }
                             tile.innerHTML = WALL;
                             break;
                         case "blank":
                             if (tile.innerHTML == PLAYER) {
                                 document.getElementById("place_player").disabled = false;
+                                update_testable(true);
                             }
                             tile.innerHTML = BLANK;
                             break;
@@ -154,6 +183,7 @@
                             document.getElementById("place_player").disabled = true;
                             tile_type_selection.value = "wall";
                             tile_type = "wall";
+                            update_testable(false);
                             break;
                     }
                 });
