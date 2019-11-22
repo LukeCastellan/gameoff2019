@@ -51,6 +51,10 @@ var Engine = (function() {
     var wall_colour = "mistyrose";
     //player colour
     var player_colour = "mediumspringgreen";
+    //the colour of DEATH
+    var death_colour = "indianred";
+    //the colour of achieving goals (something I can never do)
+    var goal_colour = "gold";
     //drawing function
     function draw() {
         //draw the background
@@ -66,13 +70,23 @@ var Engine = (function() {
                 if (in_view[b][a] == "blank") {
                     //skip!
                     continue;
-                } else {
-                    cxt.fillStyle = wall_colour;
-                    //DRAW THAT WALL! DRAW THAT WALL!
-                    var draw_x = (a - viewport.offset_x) * viewport.scale;
-                    var draw_y = (b - viewport.offset_y) * viewport.scale;
-                    cxt.fillRect(draw_x, draw_y, viewport.scale - 1, viewport.scale - 1);
                 }
+                
+                switch (in_view[b][a]) {
+                    case "wall":
+                        cxt.fillStyle = wall_colour;
+                        break;
+                    case "trap":
+                        cxt.fillStyle = death_colour;
+                        break;
+                    case "goal":
+                        cxt.fillStyle = goal_colour;
+                        break;
+                }
+                
+                var draw_x = (a - viewport.offset_x) * viewport.scale;
+                var draw_y = (b - viewport.offset_y) * viewport.scale;
+                cxt.fillRect(draw_x, draw_y, viewport.scale - 1, viewport.scale - 1);
             }
         }
         
@@ -131,11 +145,16 @@ var Engine = (function() {
     
     //the level currently playing
     var current_level = null;
+    //the level tiles mapping
+    var default_mapping =  {" ": "blank", "@": "player", "x": "wall", "!": "trap", "$": "goal"};
     //load a level
     function load_level(new_level) {
         current_level = new_level;
         Player.set_position(new_level.starting_position);
     }
+    
+    var n = 0;
+    var w = true;
     
     return {
         get gravity() {
@@ -144,6 +163,10 @@ var Engine = (function() {
         
         get current_level() {
             return current_level;
+        },
+        
+        get tile_mapping() {
+            return default_mapping;
         },
         
         log: log,
@@ -156,11 +179,38 @@ var Engine = (function() {
         
         start_game: function() {
             //load the first level
-            load_level(new Level(GAME_LEVELS[0], {" ": "blank", "@": "player", "x": "wall"}, "Level 1"));
+            load_level(new Level(GAME_LEVELS[n], default_mapping, "Level 1"));
             Player.init(document.body);
             requestAnimationFrame(animate);
         },
         
         load_level: load_level,
+        
+        end_level: function(status) {
+            if (status == "won" && w) { //player won the level
+                background_colour = "lime";
+                n++;
+                w = false;
+                
+                if (n >= GAME_LEVELS.length) {
+                    alert("you've won! congrats!");
+                    return;
+                }
+                
+                setTimeout(() => {
+                    background_colour = "royalblue";
+                    w = true;
+                    load_level(new Level(GAME_LEVELS[n], default_mapping, "Level " + (n + 1)));
+                }, 2000);
+            } else if (status == "lost" && w) { //player lost the level
+                player_colour = "indianred";
+                w = false;
+                setTimeout(() => {
+                    player_colour = "mediumspringgreen";
+                    w = true;
+                    load_level(current_level);
+                }, 2000);
+            }
+        },
     };
 })();

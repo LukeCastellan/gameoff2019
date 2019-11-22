@@ -36,7 +36,11 @@ function Level(plan, mapping, name) {
 }
 
 Level.prototype.get_tile = function(pos) {
-    return this.tiles[pos.y][pos.x];
+    if (this.tiles[pos.y]) {
+        return this.tiles[pos.y][pos.x];
+    } else {
+        return "blank";
+    }
 };
     
 Level.prototype.set_tile = function(pos, new_tile) {
@@ -47,8 +51,10 @@ Level.prototype.get_obstacle = function(pos, size) {
     var start_x = Math.floor(pos.x), end_x = Math.floor(pos.x + size.x);
     var start_y = Math.floor(pos.y), end_y = Math.floor(pos.y + size.y);
     
-    if (start_x < 0 || end_x > this.width || start_y < 0 || end_y > this.height) {
+    if (start_x < 0 || end_x > this.width || start_y < 0) {
         return "wall";
+    } else if (end_y + 1 > this.height) {
+        return "trap";
     } else {
         for (var c = start_y; c <= end_y; c++) {
             for (var b = start_x; b <= end_x; b++) {

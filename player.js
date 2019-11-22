@@ -25,19 +25,33 @@ var Player = (function() {
     
     function move_x(new_pos) {
         var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
-        if (obstacle) {
+        if (obstacle == "wall") {
 			v_x = 0
-		} else {
+		} else if (obstacle == null) {
             x = new_pos.x;
+        } else {
+            handle_obstacle(obstacle);
         }
     }
     
     function move_y(new_pos) {
         var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
-        if (obstacle) {
+        if (obstacle == "wall") {
             v_y = 0;
-        } else {
+        } else if (obstacle == null) {
             y = new_pos.y;
+        } else {
+            handle_obstacle(obstacle);
+        }
+    }
+    
+    function handle_obstacle(obstacle) {
+        if (obstacle == "goal") {
+            Engine.end_level("won");
+        }
+        
+        if (obstacle == "trap") {
+            Engine.end_level("lost");
         }
     }
     
