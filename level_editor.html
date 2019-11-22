@@ -95,7 +95,9 @@
             <select id="type">
                 <option value="wall">wall</option>
                 <option value="blank">blank</option>
+                <option value="trap">trap</option>
                 <option value="player" id="place_player">player</option>
+                <option value="goal" id="place_goal">goal</option>
             </select>
             <textarea rows="1" placeholder="level name..."></textarea>
         </section>
@@ -121,6 +123,8 @@
             var BLANK = "&#160;"
             var WALL = "x";
             var PLAYER = "@";
+            var GOAL = "$";
+            var TRAP = "!";
             
             var child_window;
             
@@ -144,9 +148,14 @@
                 
                 child_window.postMessage(grid, "*");
             });
+            
+            var has_player = false;
+            var has_goal = false;
             //is level testable?
-            function update_testable(t) {
-                document.getElementById("test").disabled = t;
+            function update_testable() {
+                document.getElementById("place_player").disabled = has_player;
+                document.getElementById("place_goal").disabled = has_goal;
+                document.getElementById("test").disabled = !(has_player && has_goal);
             }
             
             var tile_type = "wall";
@@ -166,25 +175,56 @@
                     switch (tile_type) {
                         case "wall":
                             if (tile.innerHTML == PLAYER) {
-                                document.getElementById("place_player").disabled = false;
-                                update_testable(true);
+                                has_player = false;
+                                update_testable();
                             }
+                            if (tile.innerHTML == GOAL) {
+                                has_goal = false;
+                                update_testable();
+                            }                            
                             tile.innerHTML = WALL;
                             break;
                         case "blank":
                             if (tile.innerHTML == PLAYER) {
-                                document.getElementById("place_player").disabled = false;
-                                update_testable(true);
+                                has_player = false;
+                                update_testable();
+                            }
+                            if (tile.innerHTML == GOAL) {
+                                has_goal = false;
+                                update_testable();
                             }
                             tile.innerHTML = BLANK;
                             break;
+                        case "trap":
+                            if (tile.innerHTML == PLAYER) {
+                                has_player = false;
+                                update_testable();
+                            }
+                            if (tile.innerHTML == GOAL) {
+                                has_goal = false;
+                                update_testable();
+                            }
+                            tile.innerHTML = TRAP;
+                            break;
                         case "player":
                             tile.innerHTML = PLAYER;
-                            document.getElementById("place_player").disabled = true;
                             tile_type_selection.value = "wall";
                             tile_type = "wall";
-                            update_testable(false);
+                            has_player = true;
+                            if (tile.innerHTML == GOAL) {
+                                has_goal = false;
+                            }
+                            update_testable();
                             break;
+                        case "goal":
+                            tile.innerHTML = GOAL;
+                            tile_type_selection.value = "wall";
+                            tile_type = "wall";
+                            has_goal = true;
+                            if (tile.innerHTML == PLAYER) {
+                                has_player = false;
+                            }
+                            update_testable();
                     }
                 });
             

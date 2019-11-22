@@ -22,7 +22,7 @@
             window.addEventListener("message", function(event) {
                 console.log("a custom level was received.");
                 console.log(event.data);
-                Engine.load_level(new Level(event.data, {"x": "wall", "@": "player", " ": "blank"}, "an unnamed level"));
+                Engine.load_level(new Level(event.data, Engine.tile_mapping, "an unnamed level"));
             });
         </script>
     </body>
