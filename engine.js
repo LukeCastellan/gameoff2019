@@ -32,6 +32,11 @@ var Engine = (function() {
     var drawing_canvas = null;
     //drawing canvas's context, set alongside drawing_canvas in init()
     var cxt = null;
+    //wall sprite
+    var wall_sprite = sprite("sprites/wall.png");
+    var goal_sprite = sprite("sprites/goal.png");
+    var trap_sprite = sprite("sprites/trap.png");
+    var player_sprite;
     /* the viewport
        - top and left refer to the top and left of the viewport (ie the viewport's top left corner is (top, left))
        - width and height are, respectively, the width and height of the drawing canvas, in pixels
@@ -71,22 +76,22 @@ var Engine = (function() {
                     //skip!
                     continue;
                 }
-                
+                var sprite;
                 switch (in_view[b][a]) {
                     case "wall":
-                        cxt.fillStyle = wall_colour;
+                        sprite = wall_sprite;
                         break;
                     case "trap":
-                        cxt.fillStyle = death_colour;
+                        sprite = trap_sprite;
                         break;
                     case "goal":
-                        cxt.fillStyle = goal_colour;
+                        sprite = goal_sprite;
                         break;
                 }
                 
                 var draw_x = (a - viewport.offset_x) * viewport.scale;
                 var draw_y = (b - viewport.offset_y) * viewport.scale;
-                cxt.fillRect(draw_x, draw_y, viewport.scale - 1, viewport.scale - 1);
+                cxt.drawImage(sprite, draw_x, draw_y);
             }
         }
         
@@ -214,3 +219,9 @@ var Engine = (function() {
         },
     };
 })();
+
+function sprite(path) {
+    var img = document.createElement("img");
+    img.src = path;
+    return img;
+}
