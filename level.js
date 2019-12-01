@@ -88,6 +88,7 @@ Level.prototype.get_obstacle = function(pos, size) {
         for (var c = start_y; c <= end_y; c++) {
             for (var b = start_x; b <= end_x; b++) {
                 var tile = this.tiles[c][b];
+				if (!tile) return tile;
                 if (tile.tile != "blank") return tile.tile;
             }
         }

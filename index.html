@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="stylesheet.css"/>
     </head>
     <body>
+		
         <canvas></canvas>
         <!-- try not to have circular dependencies--oh wait, i failed. -->
         <script src="frictionless.js"></script>
@@ -13,12 +14,29 @@
         <script src="level.js"></script>
         <script src="player.js"></script>
         <script src="engine.js"></script>
+        <script src="audio2.js"></script>
+		
+		<audio id="track1">
+			<source src="#1016Crevass.ogg" type="audio/ogg">
+		</audio>
+		<audio id="track2">
+			<source src="#11001ManifestDestiny.ogg" type="audio/ogg">
+		</audio>
+		<audio id="track3">
+			<source src="#11002Liberty.ogg" type="audio/ogg">
+		</audio>
         <script>
-            var canvas = document.querySelector("canvas");
-            canvas.width = 700; canvas.height = 400;
-            Engine.init(canvas);
-            Engine.start_game();
-            
+			window.onload = function()
+			{
+				var canvas = document.querySelector("canvas");
+				canvas.width = 700; canvas.height = 400;
+				Engine.init(canvas);
+				Engine.start_game();
+				AudioSystem.initialize();
+            }
+			
+			document.addEventListener("onclick", AudioSystem.playAllTracks);
+			
             window.addEventListener("message", function(event) {
                 console.log("a custom level was received.");
                 console.log(event.data);
