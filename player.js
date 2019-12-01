@@ -1,7 +1,7 @@
 var Player = (function() {
     var x = null, y = null;
     var v_x = null, v_y = null;
-    var width = 0.9, height = 1.5;
+    var width = 0.7, height = 1.5;
     
     //the player's pose. can be "standing" or "jumping"
     var pose = "standing";

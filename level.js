@@ -22,6 +22,9 @@ function Level(plan, mapping, name) {
             	tile_line.push("blank");
         	} else {
         	    tile_line.push(mapping[line[x]]);
+        	    if (mapping[line[x]] == "goal") {
+        	        this.goal = new Vector(x, y);
+        	    }
             }
     	}
         

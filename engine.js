@@ -51,15 +51,11 @@ var Engine = (function() {
         offset_x: null, offset_y: null,
     };
     //background colour
-    var background_colour = "royalblue";
-    //wall colour
-    var wall_colour = "mistyrose";
+    var background_colour = "turquoise";
+    //arrow colour
+    var arrow_colour = "gold";
     //player colour
     var player_colour = "mediumspringgreen";
-    //the colour of DEATH
-    var death_colour = "indianred";
-    //the colour of achieving goals (something I can never do)
-    var goal_colour = "gold";
     //drawing function
     function draw() {
         //draw the background
@@ -100,6 +96,21 @@ var Engine = (function() {
         var draw_y = (Player.position.y - viewport.top) * viewport.scale;
         cxt.fillStyle = player_colour;
         cxt.fillRect(draw_x, draw_y, viewport.scale * Player.dimensions.x, viewport.scale * Player.dimensions.y);
+        
+        //draw the arrow 
+        if (Math.abs(Player.position.x - current_level.goal.x) > viewport.view_width / 2||
+            Math.abs(Player.position.y - current_level.goal.y) > viewport.view_height / 2) {
+            var angle = get_angle(Player.position, current_level.goal);
+            var draw_radius = 3 * viewport.scale;
+            
+            cxt.save();
+            cxt.fillStyle = arrow_colour;
+            cxt.translate((Player.position.x - viewport.left) * viewport.scale, (Player.position.y - viewport.top) * viewport.scale);
+            cxt.translate(Math.cos(angle) * draw_radius, Math.sin(angle) * draw_radius);
+            cxt.rotate(angle);
+            cxt.beginPath(); cxt.moveTo(10, 0); cxt.lineTo(-10, 10); cxt.lineTo(-10, -10); cxt.closePath(); cxt.fill();
+            cxt.restore();
+        }
         
         cxt.fillStyle = "white";
         cxt.font = "16pt Arial";
@@ -225,3 +236,14 @@ function sprite(path) {
     img.src = path;
     return img;
 }
+
+function get_angle(start, end) {
+    var hypot = Math.hypot((end.x - start.x), (end.y - start.y));
+    var opp   = end.y - start.y;
+
+    var angle = Math.asin(opp / hypot);
+
+    if (end.x < start.x) angle = Math.PI - angle;
+
+    return angle;
+};
