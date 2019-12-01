@@ -26,11 +26,12 @@ var Player = (function() {
     function move_x(new_pos) {
         var obstacle = Engine.current_level.get_obstacle(new_pos, {x: width, y: height});
         if (obstacle == "wall") {
-			v_x = 0
+			v_x = 0;
 		} else if (obstacle == null) {
             x = new_pos.x;
         } else {
             handle_obstacle(obstacle);
+			v_x = 0;
         }
     }
     
@@ -42,6 +43,7 @@ var Player = (function() {
             y = new_pos.y;
         } else {
             handle_obstacle(obstacle);
+			v_y = 0;
         }
     }
     
@@ -161,6 +163,7 @@ var Player = (function() {
             //check for collision
             move_x({x: new_position.x, y: y});
             move_y({x: x, y: new_position.y});
+			
         },
         
         is_supported: is_supported,

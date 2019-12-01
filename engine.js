@@ -34,6 +34,30 @@ var Engine = (function() {
     var cxt = null;
     //wall sprite
     var wall_sprite = sprite("sprites/wall.png");
+	
+	var wall_sprites = sprite("sprites/ice_sheet.png");
+	var ice_sheet_width = 30;
+	var ice_sheet_height = 30;
+	var ice_sheet_defines = {
+		"isolated": {x: 0, y: 0, n:false,s:false,e:false,w:false},
+		"left": {x: 30, y: 0 , n:false,s:false,e:false,w:true},
+		"right": {x: 60, y: 0, n:false,s:false,e:true,w:false},
+		"up": {x: 0, y: 30, n:true,s:false,e:false,w:false},
+		"down": {x: 30, y: 30, n:false,s:true,e:false,w:false},
+		"straight_up": {x: 0, y: 150, n:true,s:true,e:false,w:false},
+		"straight_right": {x: 30, y: 150, n:false,s:false,e:true,w:true},
+		"turn_up": {x: 60, y: 30, n:true,s:false,e:true,w:false},
+		"turn_right": {x: 0, y: 60, n:false,s:true,e:true,w:false},
+		"turn_down": {x: 30, y: 60, n:false,s:true,e:false,w:true},
+		"turn_left": {x: 60, y: 60, n:true,s:false,e:false,w:true},
+		"t_up": {x: 0, y: 90, n:true,s:false,e:true,w:true},
+		"t_right": {x: 30, y: 90, n:true,s:true,e:true,w:false},
+		"t_down": {x: 60, y: 90, n:false,s:true,e:true,w:true},
+		"t_left": {x: 0, y: 120, n:true,s:true,e:false,w:true},
+		"fourway": {x: 30, y: 90, n:false,s:false,e:false,w:false},
+		"block": {x: 60, y: 120, n:true,s:true,e:true,w:true},
+	}
+	
     var goal_sprite = sprite("sprites/goal.png");
     var trap_sprite = sprite("sprites/trap.png");
     var player_sprite;
@@ -68,26 +92,54 @@ var Engine = (function() {
         //draw the level itself.
         for (b = 0; b < in_view.length; b++) {
             for (a = 0; a < in_view[b].length; a++) {
-                if (in_view[b][a] == "blank") {
+                if (in_view[b][a].tile == "blank") {
                     //skip!
                     continue;
                 }
                 var sprite;
-                switch (in_view[b][a]) {
+				var source_x = 0;
+				var source_y = 0;
+				var source_width;
+				var source_height;
+                switch (in_view[b][a].tile) {
                     case "wall":
-                        sprite = wall_sprite;
+                        sprite = wall_sprites;
+						
+						// neighbours
+						var nb = current_level.get_neighbours(new Vector(in_view[b][a].x, in_view[b][a].y));
+						var key = "block";
+						
+						for(var new_key in ice_sheet_defines)
+						{
+							//throw new Error(new_key);
+							var type = ice_sheet_defines[new_key];
+							if((nb.n == type.n) && (nb.s == type.s) && (nb.e == type.e) && (nb.w == type.w)) 
+							{
+								key = new_key;
+								break;
+							}
+						}
+						
+						source_x = ice_sheet_defines[key].x;
+						source_y = ice_sheet_defines[key].y;
+						source_width = ice_sheet_width;
+						source_height = ice_sheet_height;
                         break;
                     case "trap":
                         sprite = trap_sprite;
+						source_width = trap_sprite.width;
+						source_height = trap_sprite.height;
                         break;
                     case "goal":
                         sprite = goal_sprite;
+						source_width = goal_sprite.width;
+						source_height = goal_sprite.height;
                         break;
                 }
                 
                 var draw_x = (a - viewport.offset_x) * viewport.scale;
                 var draw_y = (b - viewport.offset_y) * viewport.scale;
-                cxt.drawImage(sprite, draw_x, draw_y);
+                cxt.drawImage(sprite, source_x, source_y, source_width, source_height, draw_x, draw_y, viewport.scale, viewport.scale);
             }
         }
         
